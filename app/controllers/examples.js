@@ -19,14 +19,18 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
+  // let example = Object.assign(
+  //   { _owner: req.currentUser._id }, req.body.example
+  // );
+  // Example.create(example)
   Example.create(req.body.example)
     .then(example => res.json({ example }))
     .catch(err => next(err));
 };
 
 const update = (req, res, next) => {
-  //let search = {_id: req.params.id, owner: req.current_user.id};
-  //Example.findOneAndUpdate(search, reg.body.example)
+  //let search = {_id: req.params.id, owner: req.currentUser._id};
+  //Example.findOneAndUpdate(search, req.body.example)
   Example.findById(req.params.id)
     .then(example => {
       if (!example) {
