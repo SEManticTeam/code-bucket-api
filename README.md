@@ -135,7 +135,7 @@ We're done when we see a response similar to this one:
 
 Expected response:
 
-```md
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -163,7 +163,7 @@ We will need to write a controller action and a test script.
 
 Expected response:
 
-```md
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -203,7 +203,7 @@ You will need to write a controller action and a test script.
 
 Expected response:
 
-```md
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -231,7 +231,7 @@ You will need to write a controller action and a test script.
 
 Expected response:
 
-```md
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -242,7 +242,7 @@ You may wish to retrieve the book you changed to check your work.
 If a different user than the owner tries to make the change, you should instead
 see:
 
-```md
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -266,7 +266,7 @@ You will need to write a controller action and a test script.
 
 Expected response:
 
-```md
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -275,7 +275,7 @@ Content-Type: application/json; charset=utf-8
 If a different user than the owner tries to make the change, you should instead
 see:
 
-```md
+```
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
