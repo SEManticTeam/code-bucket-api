@@ -1,35 +1,31 @@
 [![General Assembly Logo](https://camo.githubusercontent.com/1a91b05b8f4d44b5bbfb83abac2b0996d8e26c92/687474703a2f2f692e696d6775722e636f6d2f6b6538555354712e706e67)](https://generalassemb.ly/education/web-development-immersive)
 
-# Talk Template
+# Express as an API
 
-Use this template to structure your READMEs for talks. Remove text from this
-section, or use it to frame the talk you are giving. Good framing answers the
-question "Why am I learning this?".
+Express, like Rails, can be used as an API. In fact, building APIs in Express,
+especially those that use MongoDB for persistence, led to the rising popularity
+of Node.
 
-Be sure to include a recent [`LICENSE`](LICENSE) and Markdown linter
-configuration ([`.remarkrc`](.remarkrc)). Also, include an appropriate
-`.gitignore`; these are usually found in specific technology templates, for
-example [js-template](https://www.github.com/ga-wdi-boston/js-template).
+Express can be used for full-stack applications (those that have server-rendered
+views). However, we will use it purely as an API.
+
+A customized template for Express is available at [ga-wdi-boston/express-template](https://github.com/ga-wdi-boston/express-template).
+It includes authentication and common middlewares so that you can start
+developing an API right away.
 
 ## Prerequisites
 
--   Topics with which developers should be familiar with.
--   Prerequisites are "just-in-time", so if I have a prerequisite that mentions
-    Sass, I would **not** need to include CSS as a prerequisite.
--   [Links to previous materials](https://www.github.com/ga-wdi-boston/example)
-    are often useful.
+-   [ga-wdi-boston/node-http-server](https://github.com/ga-wdi-boston/node-http-server)
+-   [ga-wdi-boston/mongoose-crud](https://github.com/ga-wdi-boston/mongoose-crud)
 
 ## Objectives
 
 By the end of this, developers should be able to:
 
--   Write objectives that focus on demonstrating knowledge.
--   Write learning objectives that begin with an [imperative
-    verb](https://en.wikipedia.org/wiki/Imperative_mood).
--   Avoid objectives that start with "Use" or "Understand".
--   Rewrite objecives that begin with "Use" by inverting sentence structure.
--   End each objective with a period.
--   Write objectives on the whiteboard so they can be referenced during a talk.
+-   Develop an Express API, leveraging architectural conventions from Rails.
+-   Write five CRUD endpoints for an API resource using Express, Mongoose, and
+    JavaScript.
+-   Prevent unauthorized users from creating or changing data through the API.
 
 ## Preparation
 
@@ -37,67 +33,105 @@ By the end of this, developers should be able to:
     this repository.
 1.  Install dependencies with `npm install`.
 
-Better preparation instructions may be found as
-[snippets](https://github.com/ga-wdi-boston/instructors/tree/master/snippets).
+## A Bookstore API
 
-It's a good idea to have students do these steps while you're writing objectives
-on the whiteboard.
+We've been hired to write an API for a local bookstore, Book Before You Leap.
+They have plans to expand in the next few years, and they'll probably rival
+Amazon. Therefore, we've chosen Express because it's hip, and Mongo because it's
+Web Scale™.
 
-## Leading Topic Heading
+Let's get acquainted with how we'll use Express.
 
-Here is where the talk begins. If you have not already included framing above,
-it's appropriate to put it here. Link to introductory articles or documentation.
-Motivate the next section.
+## Demo: An Example Express Controller
 
-Demos, exercises, and labs are labelled as such, followed by a colon and a
-description of the activity starting with an [imperative
-verb](https://en.wikipedia.org/wiki/Imperative_mood).
+First, let's peek at our routes, since that's the layer that decides which code
+to run for any given request. Open [`config/routes.js`](config/routes.js) and
+read through it. Look familiar?
 
-## Demo: Write a Demo
+Have a look in the [`app`](app) directory. It looks a bit like Rails, too.
 
-Demos are demonstrations, and developers should give their full attention to
-them. It's a great time for them to take notes about important concepts before
-applying them in an exercise.
+In [`app/controllers/examples.js`](app/controllers/examples.js), we get our
+first taste of Express. What's the `(req, res, next)` signature on all our
+controller actions?
 
-Demos correspond to the "I do" portion of scaffolding from consultant trainging.
+The `req` object is a
+[http.IncomingMessage](https://nodejs.org/api/http.html#http_http_incomingmessage)
+object. The `res` object is
+[http.ServerResponse](https://nodejs.org/api/http.html#http_class_http_serverresponse)
+object. These are what we used in the node HTTP server. What about `next`?
 
-## Exercise: Write an Exercise
+> More than one callback function can handle a route (make sure you specify the
+> next object).
+>
+> – [Express routing](http://expressjs.com/en/guide/routing.html)
 
-During exercises, developers should apply concepts covered in the previous demo.
-This is their first chance to generalize concepts introduced. Exercises should
-be very focused, and flow natural into a lab.
+That means **more than one action** can be run for a single request. In fact,
+that's how Express keeps boilerplate to a minimum; we did something similar with
+`before_filter`s in Rails. Common functionality, like error handling, can be
+extracted into a middleware and run on any request you like. However, you
+**must** use `next` to propagate errors onward.
 
-Exercises correspond to the "We do" portion of scaffolding from consultant
-trainging.
+Likewise, `res.json` signals to Express that we're done working on our response.
+It's analogous to Rails' `render` method. If you don't use a **terminal
+handler**, Express will keep the connection open waiting for one. You and
+Express will both be frustrated and confused. Here's a list of terminal
+handlers. You will use `res.json` and `res.sendStatus` most frequently.
 
-## Lab: Write a Lab
+| Response method      | What it means                                                                         |
+|:---------------------|:--------------------------------------------------------------------------------------|
+| `res.end()`          | End the response process.                                                             |
+| `res.json(jsObject)` | Send a JSON response.                                                                 |
+| `res.redirect()`     | Redirect a request.                                                                   |
+| `res.sendStatus()`   | Set the response status code and send its string representation as the response body. |
 
-During labs, developers get to demonstrate their understanding of concepts from
-demos and applied knowledge from exercises. Labs are an opportunity for
-developers to build confidence, and also serve as a diagnostic tool for
-consultants to evaluate developer understanding.
+## Lab: Summarize Actions in Examples Controller
 
-Labs should be timed explicitly using a timer. When estimating the time it will
-take to complete a lab, it is better to overestimate. During labs, consultants
-should circle the room and interact with developers, noting patterns and
-prompting with hints on how to complete the lab. If developers end early, a
-consultant may stop the lab timer. If developers do not finish in time, a
-consultant may give more time at her discretion based on current talk pace, the
-current estimate for the talk, and the importance of completing the lab while
-consultant support is available.
+Practice reading unfamiliar code by annotating
+[`app/controllers/examples.js`](app/controllers/examples.js). As you read each
+controller action, keep the following questions in mind. You will be asked to
+answer them when we share our notes.
 
-Labs correspond to the "You do" portion of scaffolding from consultant
-trainging.
+-   What is the purpose of this action?
+-   Does it need a singular or plural resource to build its response?
+-   How is the action handling errors?
+-   Why do we need to check for the existence of a record after querying?
+-   Where do we get IDs from?
+-   Where do we get data from when creating or updating a record?
+-   Which terminal handler is used to send a respone?
+
+## Demo: An Example Express Model
+
+Let's read [`app/models/example.js`](app/models/example.js) and answer the
+following questions together:
+
+-   What library are we using to model our resources? Does it have anything to
+    do with Express?
+-   What does the underscore denote in `_owner`?
+-   Where should we go to find out more about an owner?
+-   Why aren't we using an arrow function for the virtual attribute `length`?
+
+## Lab: Create an Example
+
+Start the server and try creating an example by issuing a `POST /examples`. What
+happens? You might find some help in the [`scripts`](scripts) directory.
+
+When you've created an example, try using its ID to request it via `GET
+/examples/:id`. Then, create another and check your work with `GET /examples`.
+
+## Code-Along: `GET /books`
+
+## Lab: `GET /books/:id`
+
+## Lab: `POST /books`
+
+## Lab: `PATCH /books`
+
+## Lab: `DELETE /books/:id`
 
 ## Additional Resources
 
--   Any useful links should be included in the talk material where the link is
-    first referenced.
--   Additional links for further study or exploration are appropriate in this
-    section.
--   Links to important parts of documentation not covered during the talk, or
-    tools tangentially used but not part of the focus of the talk, are also
-    appropriate.
+-   [Express - Node.js web application framework](http://expressjs.com/)
+-   [ga-wdi-boston/express-template: Railsified express server](https://github.com/ga-wdi-boston/express-template)
 
 ## [License](LICENSE)
 
