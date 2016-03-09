@@ -118,15 +118,177 @@ happens? You might find some help in the [`scripts`](scripts) directory.
 When you've created an example, try using its ID to request it via `GET
 /examples/:id`. Then, create another and check your work with `GET /examples`.
 
+## Code-Along: `POST /books`
+
+Only authenticated users should be able to create a book.
+
+Let's create our book model together, and one controller action. Don't forget
+a route!
+
+Make sure to save a reference to the user that created the book so we can user
+it later to check ownership.
+
+We'll need to write a test script to check our work. We'll save it as
+[`scripts/books-create.sh`](scripts/books-create.sh).
+
+We're done when we see a response similar to this one:
+
+Expected response:
+
+```md
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+
+{
+  "book": {
+    "__v": 0,
+    "updatedAt": "2016-03-09T03:23:58.000Z",
+    "createdAt": "2016-03-09T03:23:58.000Z",
+    "_owner": "56df9716c19957cb0d836c4a",
+    "title": "Time Enough for Love",
+    "author": "Robert A. Heinlein",
+    "price": 8.99,
+    "_id": "56df974ec19957cb0d836c4d"
+  }
+}
+```
+
 ## Code-Along: `GET /books`
+
+Visitors to the client web application should be able to see all the books
+without being logged in.
+
+We will need to write a controller action and a test script.
+
+Expected response:
+
+```md
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+
+{
+  "books": [
+    {
+      "_id": "56df974ec19957cb0d836c4c",
+      "updatedAt": "2016-03-09T03:23:58.000Z",
+      "createdAt": "2016-03-09T03:23:58.000Z",
+      "_owner": "56df9716c19957cb0d836c4a",
+      "title": "The Name of the Wind",
+      "author": "Patrick Rothfuss",
+      "price": 8.99,
+      "__v": 0
+    },
+    {
+      "_id": "56df974ec19957cb0d836c4d",
+      "updatedAt": "2016-03-09T03:23:58.000Z",
+      "createdAt": "2016-03-09T03:23:58.000Z",
+      "_owner": "56df9716c19957cb0d836c4a",
+      "title": "Time Enough for Love",
+      "author": "Robert A. Heinlein",
+      "price": 8.99,
+      "__v": 0
+    }
+  ]
+}
+```
 
 ## Lab: `GET /books/:id`
 
-## Lab: `POST /books`
+Visitors to the client web application should be able to see any book without
+being logged in.
+
+You will need to write a controller action and a test script.
+
+Expected response:
+
+```md
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+
+{
+  "book": {
+    "_id": "56df974ec19957cb0d836c4c",
+    "updatedAt": "2016-03-09T03:23:58.000Z",
+    "createdAt": "2016-03-09T03:23:58.000Z",
+    "_owner": "56df9716c19957cb0d836c4a",
+    "title": "The Name of the Wind",
+    "author": "Patrick Rothfuss",
+    "price": 8.99,
+    "__v": 0
+  }
+}
+```
 
 ## Lab: `PATCH /books`
 
+Only authenticated users should be able to change a book. They should not be
+able to change other users' books.
+
+You will need to write a controller action and a test script.
+
+Expected response:
+
+```md
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+```
+
+You may wish to retrieve the book you changed to check your work.
+
+If a different user than the owner tries to make the change, you should instead
+see:
+
+```md
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+
+{
+  "error": {
+    "message": "Not Found",
+    "error": {
+      "status": 404
+    }
+  }
+}
+```
+
 ## Lab: `DELETE /books/:id`
+
+Only authenticated users should be able to delete a book. They should not be
+able to delete other users' books.
+
+You will need to write a controller action and a test script.
+
+Expected response:
+
+```md
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+```
+
+If a different user than the owner tries to make the change, you should instead
+see:
+
+```md
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+
+{
+  "error": {
+    "message": "Not Found",
+    "error": {
+      "status": 404
+    }
+  }
+}
+```
 
 ## Additional Resources
 
