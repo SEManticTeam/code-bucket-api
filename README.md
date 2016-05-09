@@ -159,9 +159,9 @@ Content-Type: application/json; charset=utf-8
     "updatedAt": "2016-03-09T03:23:58.000Z",
     "createdAt": "2016-03-09T03:23:58.000Z",
     "_owner": "56df9716c19957cb0d836c4a",
-    "title": "Time Enough for Love",
-    "author": "Robert A. Heinlein",
-    "price": 8.99,
+    "title": "Invisible Monsters",
+    "author": "Chuck Palahniuk",
+    "price": 10.99,
     "_id": "56df974ec19957cb0d836c4d"
   }
 }
@@ -188,9 +188,9 @@ Content-Type: application/json; charset=utf-8
       "updatedAt": "2016-03-09T03:23:58.000Z",
       "createdAt": "2016-03-09T03:23:58.000Z",
       "_owner": "56df9716c19957cb0d836c4a",
-      "title": "The Name of the Wind",
-      "author": "Patrick Rothfuss",
-      "price": 8.99,
+      "title": "Between the World and Me",
+      "author": "Ta-Nehisi Coates",
+      "price": 12.99,
       "__v": 0
     },
     {
@@ -198,9 +198,9 @@ Content-Type: application/json; charset=utf-8
       "updatedAt": "2016-03-09T03:23:58.000Z",
       "createdAt": "2016-03-09T03:23:58.000Z",
       "_owner": "56df9716c19957cb0d836c4a",
-      "title": "Time Enough for Love",
-      "author": "Robert A. Heinlein",
-      "price": 8.99,
+      "title": "Invisible Monsters",
+      "author": "Chuck Palahniuk",
+      "price": 10.99,
       "__v": 0
     }
   ]
@@ -227,15 +227,15 @@ Content-Type: application/json; charset=utf-8
     "updatedAt": "2016-03-09T03:23:58.000Z",
     "createdAt": "2016-03-09T03:23:58.000Z",
     "_owner": "56df9716c19957cb0d836c4a",
-    "title": "The Name of the Wind",
-    "author": "Patrick Rothfuss",
-    "price": 8.99,
+    "title": "Between the World and Me",
+    "author": "Ta-Nehisi Coates",
+    "price": 12.99,
     "__v": 0
   }
 }
 ```
 
-## Lab: `PATCH /books`
+## Lab: `PATCH /books/:id`
 
 Only authenticated users should be able to change a book. They should not be
 able to change other users' books.
