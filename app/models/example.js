@@ -3,11 +3,14 @@
 const mongoose = require('mongoose');
 
 const exampleSchema = new mongoose.Schema({
-  text: String,
-
+  text: {
+    type: String,
+    required: true,
+  },
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
   },
 }, {
   timestamps: true,

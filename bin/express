@@ -2,7 +2,7 @@
 
 case ${1} in
   s|server)
-    NODE_PATH=${PWD} node ${PWD}/server.js
+    NODE_PATH=${PWD} node "${PWD}/server.js"
     ;;
   *)
   echo "${1} unknown command"

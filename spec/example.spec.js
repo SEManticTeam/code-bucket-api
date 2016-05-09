@@ -1,6 +1,6 @@
 'use strict';
 
-var example = require('../lib/example');
+const example = require('../lib/example');
 
 describe('Example', () => {
   it('is true', () => {

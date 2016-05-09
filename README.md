@@ -31,7 +31,19 @@ By the end of this, developers should be able to:
 
 1.  [Fork and clone](https://github.com/ga-wdi-boston/meta/wiki/ForkAndClone)
     this repository.
-1.  Install dependencies with `npm install`.
+    1.  Install dependencies with `npm install`.
+    1.  Verify monogdb is runnning with `brew services list` (run `brew services restart mongodb` if not)
+    1.  Set a SECRET_KEY in the environment.
+    1.  Run the API server with `npm start`. If you want your code to be reloaded on
+        change, you should `npm install -g nodemon` and use `nodemon` instead of
+        `npm start`.
+
+    For development and testing, set the SECRET_KEY from the root of your
+     repository using
+
+    ```sh
+    echo SECRET_KEY=$(/usr/local/opt/openssl/bin/openssl rand -base64 66 | tr -d '\n') >>.env
+    ```
 
 ## A Bookstore API
 

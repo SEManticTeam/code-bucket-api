@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('express-api:users');
+const debug = require('debug')('express-template:users');
 
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
@@ -9,6 +9,15 @@ const User = models.user;
 const crypto = require('crypto');
 
 const authenticate = require('./concerns/authenticate');
+
+const HttpError = require('lib/wiring/http-error');
+
+const MessageVerifier = require('lib/wiring/message-verifier');
+
+const encodeToken = (token) => {
+  const mv = new MessageVerifier('secure-token', process.env.SECRET_KEY);
+  return mv.generate(token);
+};
 
 const getToken = () =>
   new Promise((resolve, reject) =>
@@ -20,32 +29,36 @@ const getToken = () =>
 const userFilter = { passwordDigest: 0, token: 0 };
 
 const index = (req, res, next) => {
-  User.find({}, userFilter).exec()
+  User.find({}, userFilter)
     .then(users => res.json({ users }))
     .catch(err => next(err));
 };
 
 const show = (req, res, next) => {
-  User.findById(req.params.id, userFilter).exec()
+  User.findById(req.params.id, userFilter)
     .then(user => user ? res.json({ user }) : next())
     .catch(err => next(err));
 };
 
+const makeErrorHandler = (res, next) =>
+  error =>
+    error && error.name && error.name === 'ValidationError' ?
+      res.status(400).json({ error }) :
+    next(error);
+
 const signup = (req, res, next) => {
   let credentials = req.body.credentials;
-  let user = { email: credentials.email };
+  let user = { email: credentials.email, password: credentials.password };
   getToken().then(token =>
     user.token = token
   ).then(() =>
-    new User(user).setPassword(credentials.password)
+    new User(user).save()
   ).then(newUser => {
     let user = newUser.toObject();
     delete user.token;
     delete user.passwordDigest;
     res.json({ user });
-  }).catch(err =>
-    next(err)
-  );
+  }).catch(makeErrorHandler(res, next));
 
 };
 
@@ -54,7 +67,8 @@ const signin = (req, res, next) => {
   let search = { email: credentials.email };
   User.findOne(search
   ).then(user =>
-    user.comparePassword(credentials.password)
+    user ? user.comparePassword(credentials.password) :
+          Promise.reject(new HttpError(404))
   ).then(user =>
     getToken().then(token => {
       user.token = token;
@@ -63,10 +77,9 @@ const signin = (req, res, next) => {
   ).then(user => {
     user = user.toObject();
     delete user.passwordDigest;
+    user.token = encodeToken(user.token);
     res.json({ user });
-  }).catch(err =>
-    next(err)
-  );
+  }).catch(makeErrorHandler(res, next));
 };
 
 const signout = (req, res, next) => {
@@ -89,18 +102,13 @@ const changepw = (req, res, next) => {
     token: req.currentUser.token,
   }).then(user =>
     user ? user.comparePassword(req.body.passwords.old) :
-      Promise.reject(new Error('Not found'))
-  ).then(user =>
-    user.setPassword(req.body.passwords.old)
-  ).then((/* user */) =>
+      Promise.reject(new HttpError(404))
+  ).then(user => {
+    user.password = req.body.passwords.new;
+    return user.save();
+  }).then((/* user */) =>
     res.sendStatus(200)
-  ).catch(err => {
-    if (err.message === 'Not Found') {
-      err.status = 404;
-    }
-
-    next(err);
-  });
+  ).catch(makeErrorHandler(res, next));
 };
 
 module.exports = controller({

@@ -1,9 +1,9 @@
 'use strict';
 
+const HttpError = require('lib/wiring/http-error');
+
 const notFound = (request, response, next) => {
-  var error = new Error('Not Found');
-  error.status = 404;
-  next(error);
+  next(new HttpError(404));
 };
 
 module.exports = notFound;

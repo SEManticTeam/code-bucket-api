@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const middleware = require('app/middleware');
@@ -20,7 +22,7 @@ app.use(middleware['404']);
 // error handlers
 app.use(middleware['error-handler']);
 
-const debug = require('debug')('express-api:server');
+const debug = require('debug')('express-template:server');
 const http = require('http');
 
 /**

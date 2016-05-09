@@ -9,8 +9,8 @@ const cors = require('cors');
 
 const loader = require('lib/wiring/loader');
 
-var corsOptions = {
-  origin: process.env.GITHUB_IO_URL || 'http://localhost:8080',
+const corsOptions = {
+  origin: process.env.CLIENT_URL || 'http://localhost:8080',
 };
 
 const before = (app) => {

@@ -10,5 +10,6 @@
   "nonew": true,
   "strict": "global",
   "undef": true,
-  "unused": true
+  "unused": true,
+  "varstmt": true
 }
