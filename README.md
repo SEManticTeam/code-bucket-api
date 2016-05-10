@@ -33,14 +33,14 @@ By the end of this, developers should be able to:
     this repository.
 1.  Install dependencies with `npm install`.
 1.  Verify monogdb is runnning with `brew services list`
-  -  run `brew services restart mongodb` if not
+    (Run `brew services restart mongodb` if not)
 1.  Set a SECRET_KEY in the environment.
 1.  Run the API server with `npm start`. If you want your code to be reloaded on
     change, you should `npm install -g nodemon` and use `nodemon` instead of
     `npm start`.
 
     For development and testing, set the SECRET_KEY from the root of your
-     repository using
+     repository using:
 
     ```sh
     echo SECRET_KEY=$(/usr/local/opt/openssl/bin/openssl rand -base64 66 | tr -d '\n') >>.env
@@ -148,7 +148,7 @@ We're done when we see a response similar to this one:
 
 Expected response:
 
-```
+```sh
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -176,7 +176,7 @@ We will need to write a controller action and a test script.
 
 Expected response:
 
-```
+```sh
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -216,7 +216,7 @@ You will need to write a controller action and a test script.
 
 Expected response:
 
-```
+```sh
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -244,7 +244,7 @@ You will need to write a controller action and a test script.
 
 Expected response:
 
-```
+```sh
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -255,7 +255,7 @@ You may wish to retrieve the book you changed to check your work.
 If a different user than the owner tries to make the change, you should instead
 see:
 
-```
+```sh
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -279,7 +279,7 @@ You will need to write a controller action and a test script.
 
 Expected response:
 
-```
+```sh
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -288,7 +288,7 @@ Content-Type: application/json; charset=utf-8
 If a different user than the owner tries to make the change, you should instead
 see:
 
-```
+```sh
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
