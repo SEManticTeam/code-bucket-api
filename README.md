@@ -110,7 +110,7 @@ answer them when we share our notes.
 -   Why do we need to check for the existence of a record after querying?
 -   Where do we get IDs from?
 -   Where do we get data from when creating or updating a record?
--   Which terminal handler is used to send a respone?
+-   Which terminal handler is used to send a response?
 
 ## Demo: An Example Express Model
 
