@@ -39,16 +39,16 @@ By the end of this, developers should be able to:
     change, you should `npm install -g nodemon` and use `nodemon` instead of
     `npm start`.
 
-    For development and testing, set the SECRET_KEY from the root of your
-     repository using:
+For development and testing, set the SECRET_KEY from the root of your
+ repository using:
 
-    ```sh
-    echo SECRET_KEY=$(/usr/local/opt/openssl/bin/openssl rand -base64 66 | tr -d '\n') >>.env
-    ```
+```sh
+echo SECRET_KEY=$(/usr/local/opt/openssl/bin/openssl rand -base64 66 | tr -d '\n') >>.env
+```
 
 ## A Bookstore API
 
-We've been hired to write an API for a local bookstore, Book Before You Leap.
+We've been hired to write an API for a local bookstore, 'Book Before You Leap'.
 They have plans to expand in the next few years, and they'll probably rival
 Amazon. Therefore, we've chosen Express because it's hip, and Mongo because it's
 Web Scale™.
