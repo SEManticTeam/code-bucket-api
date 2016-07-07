@@ -5,6 +5,9 @@
   "scripts": {
     "start": "./bin/express server"
   },
+  "engines": {
+    "node": "4.4.0"
+  },
   "dependencies": {
     "bcrypt": "^0.8.5",
     "body-parser": "~1.13.2",
