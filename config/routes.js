@@ -18,4 +18,14 @@ module.exports = require('lib/wiring/routes')
 .resources('users', { only: ['index', 'show'] })
 
 // all routes created
+.resources('books')
+
+// .resources('books') does this:
+    // .post('/books', 'books#create')
+    // .get('/books', 'books#index')
+    // .get('/books/:id', 'books#show')
+    // .patch('/books/:id', 'books#update')
+    // .delete('/books/:id', 'books#destroy')
+
+// the semicolon ends the one long line of code this file is
 ;
