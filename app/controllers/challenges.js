@@ -19,11 +19,20 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  let challenge = Object.assign(req.body.challenge, {
-    _owner: req.currentUser._id,
-  });
+  console.log('req.body: ', req.body);
+  let reqChallenge = req.body.challenge;
+  let challenge = {
+                    name: reqChallenge.name,
+                    language: reqChallenge.language,
+                    description: reqChallenge.description,
+                    _owner: req.currentUser._id
+                  };
+
   Challenge.create(challenge)
-  .then(challenge => res.json({ challenge }))
+  .then( (challenge) => {
+    console.log('challenge: ', challenge);
+    res.json({ challenge });
+  })
   .catch(err => next(err));
 };
 

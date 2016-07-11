@@ -18,7 +18,7 @@ module.exports = require('lib/wiring/routes')
 .resources('users', { only: ['index', 'show'] })
 
 // all routes created
-.resources('submissions')
+.resources('submissions', { only: ['index','show','create'] })
 .resources('challenges')
 
 // .resources('books') does this:

@@ -35,12 +35,12 @@ const submissionSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true,
-  toJSON: { virtuals: true },
+  // toJSON: { virtuals: true },
 });
 
-submissionSchema.virtual('versions').get(function versions() {
-  return this.locations.length;
-});
+// submissionSchema.virtual('versions').get(function versions() {
+//   return this.locations.length;
+// });
 
 const Submission = mongoose.model('Submission', submissionSchema);
 
