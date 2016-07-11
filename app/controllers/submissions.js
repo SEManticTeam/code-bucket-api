@@ -1,8 +1,12 @@
 'use strict';
 
 const controller = require('lib/wiring/controller');
+const multer = require('app/middleware').multer;
+
 const models = require('app/models');
 const Submission = models.submission;
+
+const uploader = require('lib/aws-s3-upload');
 
 const authenticate = require('./concerns/authenticate');
 
@@ -19,49 +23,56 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  let submission = Object.assign(req.body.submission, {
-    _owner: req.currentUser._id,
-  });
-  Submission.create(submission)
-  .then(submission => res.json({ submission }))
+  uploader.awsUpload(req.file.buffer)
+  .then((response) => {
+    //return Object.assign({ // probably necessary for auth attaching user id
+    return {
+      comment: req.body.upload.comment,
+      location: response.Location,
+    };
+  })
+  .then((upload) => {
+    return Submission.create(upload);
+  })
+  .then(upload => res.json({ upload }))
   .catch(err => next(err));
 };
 
-const update = (req, res, next) => {
-  let search = { _id: req.params.id, _owner: req.currentUser._id };
-  Submission.findOne(search)
-    .then(submission => {
-      if (!submission) {
-        return next();
-      }
-
-      delete req.body._owner;  // disallow owner reassignment.
-      return submission.update(req.body.submission)
-        .then(() => res.sendStatus(200));
-    })
-    .catch(err => next(err));
-};
-
-const destroy = (req, res, next) => {
-  let search = { _id: req.params.id, _owner: req.currentUser._id };
-  Submission.findOne(search)
-    .then(submission => {
-      if (!submission) {
-        return next();
-      }
-
-      return submission.remove()
-        .then(() => res.sendStatus(200));
-    })
-    .catch(err => next(err));
-};
+// const update = (req, res, next) => {
+//   let search = { _id: req.params.id, _owner: req.currentUser._id };
+//   Submission.findOne(search)
+//     .then(submission => {
+//       if (!submission) {
+//         return next();
+//       }
+//
+//       delete req.body._owner;  // disallow owner reassignment.
+//       return submission.update(req.body.submission)
+//         .then(() => res.sendStatus(200));
+//     })
+//     .catch(err => next(err));
+// };
+//
+// const destroy = (req, res, next) => {
+//   let search = { _id: req.params.id, _owner: req.currentUser._id };
+//   Submission.findOne(search)
+//     .then(submission => {
+//       if (!submission) {
+//         return next();
+//       }
+//
+//       return submission.remove()
+//         .then(() => res.sendStatus(200));
+//     })
+//     .catch(err => next(err));
+// };
 
 module.exports = controller({
   index,
   show,
   create,
-  update,
-  destroy,
+  // update,
+  // destroy,
 }, { before: [
   { method: authenticate, except: ['index', 'show'] },
 ], });
