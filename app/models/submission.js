@@ -2,18 +2,24 @@
 
 const mongoose = require('mongoose');
 
-const userFileSchema = new mongoose.Schema({
+const submissionSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   },
-  storageLinks: [{
+  locations: [{
     type: String,
     required: true,
     unique: true
   }],
+  pass: {
+    type: Boolean,
+  },
+  graded: {
+    type: Boolean,
+    default: false,
+  },
   tags: [{
-    // content: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
     type: String,
     required: false
   }],
@@ -32,10 +38,10 @@ const userFileSchema = new mongoose.Schema({
   toJSON: { virtuals: true },
 });
 
-userFileSchema.virtual('activity').get(function activity() {
-  return this.storageLinks.links.length;
+submissionSchema.virtual('versions').get(function versions() {
+  return this.locations.length;
 });
 
-const UserFile = mongoose.model('UserFile', userFileSchema);
+const Submission = mongoose.model('Submissions', submissionSchema);
 
-module.exports = UserFile;
+module.exports = Submission;

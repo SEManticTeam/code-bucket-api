@@ -19,8 +19,8 @@ module.exports = require('lib/wiring/routes')
 
 // all routes created
 .resources('books')
-.resources('userFiles')
-.resources('challenge')
+.resources('submissions')
+.resources('challenges')
 
 // .resources('books') does this:
     // .post('/books', 'books#create')
