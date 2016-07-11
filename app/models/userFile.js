@@ -22,6 +22,11 @@ const userFileSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  _challenge: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Challenge',
+    required: true,
+  },
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
