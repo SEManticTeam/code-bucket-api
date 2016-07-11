@@ -7,15 +7,16 @@ const userFileSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  storageLink: {
-    type: String, // can eventually be an array
+  storageLinks: [{
+    type: String,
     required: true,
     unique: true
-  },
-  tags: {
-    content: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
+  }],
+  tags: [{
+    // content: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
+    type: String,
     required: false
-  },
+  }],
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -23,7 +24,11 @@ const userFileSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true,
-  // toJSON: { virtuals: true },
+  toJSON: { virtuals: true },
+});
+
+userFileSchema.virtual('activity').get(function activity() {
+  return this.storageLinks.links.length;
 });
 
 const UserFile = mongoose.model('UserFile', userFileSchema);
