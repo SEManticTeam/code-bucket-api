@@ -23,7 +23,7 @@ module.exports = require('lib/wiring/routes')
 
 .resources('challenges')
 .get('/user-challenges', 'challenges#getUserChallenges')
-.get('/challenge-submissions', 'challenges#getChallengeSubmissions')
+.get('/challenge-submissions/:id', 'challenges#getChallengeSubmissions')
 
 // .resources('books') does this:
     // .post('/books', 'books#create')

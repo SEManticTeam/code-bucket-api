@@ -73,7 +73,9 @@ const getUserChallenges = (req, res, next) => {
 };
 
 const getChallengeSubmissions = (req, res, next) => {
-  Submission.find({ _challenge: req.challenge.id })
+  // We dont have a link between challenge and submissions yet
+  // Submission.find({ _challenge: req.challenge.id })
+  Submission.find()
     .then(submissions => res.json({ submissions }))
     .catch(err => next(err));
 };
