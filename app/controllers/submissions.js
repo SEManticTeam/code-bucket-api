@@ -67,12 +67,19 @@ const create = (req, res, next) => {
 //     .catch(err => next(err));
 // };
 
+const getUserSubmissions = (req, res, next) => {
+  Submission.find({ _owner: req.currentUser._id })
+    .then(submissions => res.json({ submissions }))
+    .catch(err => next(err));
+};
+
 module.exports = controller({
   index,
   show,
   create,
   // update,
   // destroy,
+  getUserSubmissions,
 }, { before: [
   { method: authenticate, except: ['index', 'show'] },
 ], });

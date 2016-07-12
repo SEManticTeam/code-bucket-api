@@ -19,7 +19,11 @@ module.exports = require('lib/wiring/routes')
 
 // all routes created
 .resources('submissions', { only: ['index','show','create'] })
+.get('/submissions/mine', 'submissions#getUserSubmissions')
+
 .resources('challenges')
+.get('/user-challenges', 'challenges#getUserChallenges')
+.get('/challenge-submissions', 'challenges#getChallengeSubmissions')
 
 // .resources('books') does this:
     // .post('/books', 'books#create')

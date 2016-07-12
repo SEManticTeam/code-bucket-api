@@ -3,6 +3,7 @@
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
 const Challenge = models.challenge;
+const Submission = models.submission;
 
 const authenticate = require('./concerns/authenticate');
 
@@ -65,12 +66,26 @@ const destroy = (req, res, next) => {
     .catch(err => next(err));
 };
 
+const getUserChallenges = (req, res, next) => {
+  Challenge.find({ _owner: req.currentUser._id })
+    .then(challenges => res.json({ challenges }))
+    .catch(err => next(err));
+};
+
+const getChallengeSubmissions = (req, res, next) => {
+  Submission.find({ _challenge: req.challenge.id })
+    .then(submissions => res.json({ submissions }))
+    .catch(err => next(err));
+};
+
 module.exports = controller({
   index,
   show,
   create,
   update,
   destroy,
+  getUserChallenges,
+  getChallengeSubmissions,
 }, { before: [
   { method: authenticate, except: ['index', 'show'] },
 ], });
