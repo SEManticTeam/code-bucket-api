@@ -5,13 +5,17 @@ const mongoose = require('mongoose');
 const submissionSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: false
   },
-  locations: [{
+  comment: {
+    type: String,
+    required: false
+  },
+  location: {
     type: String, // can eventually be an array
     required: true,
     unique: true
-  }],
+  },
   tags: [{
     type: String,
     required: false
@@ -26,12 +30,12 @@ const submissionSchema = new mongoose.Schema({
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: false,
   },
   _challenge: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Challenge',
-    required: true,
+    required: false,
   },
 }, {
   timestamps: true,

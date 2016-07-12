@@ -8,7 +8,7 @@ const Submission = models.submission;
 
 const uploader = require('lib/aws-s3-upload');
 
-const authenticate = require('./concerns/authenticate');
+// const authenticate = require('./concerns/authenticate');
 
 const index = (req, res, next) => {
   Submission.find()
@@ -81,5 +81,6 @@ module.exports = controller({
   // destroy,
   getUserSubmissions,
 }, { before: [
-  { method: authenticate, except: ['index', 'show'] },
+  // { method: authenticate, except: ['index', 'show'] },
+  { method: multer.single('upload[file]'), only: ['create'] },
 ], });
