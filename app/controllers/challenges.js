@@ -27,6 +27,7 @@ const create = (req, res, next) => {
                     description: reqChallenge.description,
                     _owner: req.currentUser._id,
                     ownerName: req.currentUser.givenName + ' ' + req.currentUser.surname,
+                    submissionCount: 0,
                   };
 
   Challenge.create(challenge)

@@ -27,6 +27,10 @@ const challengeSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  submissionCount: {
+    type: Number,
+    required: false
+  },
 }, {
   timestamps: true,
   // toJSON: { virtuals: true },
@@ -34,7 +38,7 @@ const challengeSchema = new mongoose.Schema({
 });
 
 // challengeSchema.virtual('submissions').get(function submissions() {
-//   return Submission.find({_challenge: this._id}).count();
+//   return Submission.count({_challenge: this._id});
 // });
 
 // challengeSchema.virtual('userNamer').set(function() {
