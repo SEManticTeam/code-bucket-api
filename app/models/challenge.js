@@ -2,9 +2,9 @@
 
 const mongoose = require('mongoose');
 
-const Submission = require('./submission.js');
-
-const User = require('./user.js');
+// const Submission = require('./submission.js');
+//
+// const User = require('./user.js');
 
 const challengeSchema = new mongoose.Schema({
   name: {
@@ -16,6 +16,9 @@ const challengeSchema = new mongoose.Schema({
     required: true
   },
   ownerName: {
+    type: String,
+  },
+  ownerName2: {
     type: String,
   },
   description: {
