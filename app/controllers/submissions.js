@@ -41,21 +41,35 @@ const create = (req, res, next) => {
   .catch(err => next(err));
 };
 
-// const update = (req, res, next) => {
-//   let search = { _id: req.params.id, _owner: req.currentUser._id };
-//   Submission.findOne(search)
-//     .then(submission => {
-//       if (!submission) {
-//         return next();
-//       }
-//
-//       delete req.body._owner;  // disallow owner reassignment.
-//       return submission.update(req.body.submission)
-//         .then(() => res.sendStatus(200));
-//     })
-//     .catch(err => next(err));
-// };
-//
+const update = (req, res, next) => {
+  let search = { _id: req.params.id, _owner: req.currentUser._id };
+  Submission.findOne(search)
+    .then(submission => {
+      if (!submission) {
+        return next();
+      }
+
+      // disallow owner reassignment
+      delete req.body._owner;
+
+      // upload file to S3
+      uploader.awsUpload(req.file.buffer)
+
+      .then((response) => {
+        return {
+          location: response.Location,
+        };
+      })
+      .then((updateObject) => {
+        return submission.update(updateObject);
+      })
+      .then((updateObject) => {
+        res.json({ updateObject });
+      })
+      .catch(err => next(err));
+    });
+  };
+
 const destroy = (req, res, next) => {
   let search = { _id: req.params.id, _owner: req.currentUser._id };
   Submission.findOne(search)
@@ -81,10 +95,10 @@ module.exports = controller({
   index,
   show,
   create,
-  // update,
+  update,
   destroy,
   getUserSubmissions,
 }, { before: [
   { method: authenticate, except: ['index', 'show'] },
-  { method: multer.single('upload[file]'), only: ['create'] },
+  { method: multer.single('upload[file]'), only: ['create', 'update'] },
 ], });
