@@ -20,7 +20,6 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  console.log('req.body: ', req.body);
   let reqChallenge = req.body.challenge;
   let challenge = {
                     name: reqChallenge.name,
@@ -31,7 +30,6 @@ const create = (req, res, next) => {
 
   Challenge.create(challenge)
   .then( (challenge) => {
-    console.log('challenge: ', challenge);
     res.json({ challenge });
   })
   .catch(err => next(err));
@@ -73,9 +71,7 @@ const getUserChallenges = (req, res, next) => {
 };
 
 const getChallengeSubmissions = (req, res, next) => {
-  // We dont have a link between challenge and submissions yet
-  // Submission.find({ _challenge: req.challenge.id })
-  Submission.find()
+  Submission.find({_challenge: req.params.id})
     .then(submissions => res.json({ submissions }))
     .catch(err => next(err));
 };

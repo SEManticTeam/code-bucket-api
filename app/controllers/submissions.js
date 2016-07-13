@@ -27,7 +27,7 @@ const create = (req, res, next) => {
   .then((response) => {
     //return Object.assign({ // probably necessary for auth attaching user id
     return {
-      // comment: req.body.upload.comment,
+      _challenge: req.body.upload.challenge_id,
       location: response.Location,
     };
   })
