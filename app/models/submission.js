@@ -7,6 +7,10 @@ const submissionSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  challengeName: {
+    type: String,
+    required: false
+  },
   comment: {
     type: String,
     required: false
