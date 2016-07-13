@@ -18,9 +18,6 @@ const challengeSchema = new mongoose.Schema({
   ownerName: {
     type: String,
   },
-  ownerName2: {
-    type: String,
-  },
   description: {
     type: String,
     required: true

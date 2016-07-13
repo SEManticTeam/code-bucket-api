@@ -26,8 +26,7 @@ const create = (req, res, next) => {
                     language: reqChallenge.language,
                     description: reqChallenge.description,
                     _owner: req.currentUser._id,
-                    ownerName: reqChallenge.ownerName,
-                    ownerName2: req.currentUser.givenName + ' ' + req.currentUser.surname,
+                    ownerName: req.currentUser.givenName + ' ' + req.currentUser.surname,
                   };
 
   Challenge.create(challenge)
