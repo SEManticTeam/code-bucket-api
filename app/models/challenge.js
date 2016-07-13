@@ -15,7 +15,7 @@ const challengeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  userName: {
+  ownerName: {
     type: String,
   },
   description: {
@@ -29,19 +29,19 @@ const challengeSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { getters: true, setters: true },
+  // toJSON: { virtuals: true },
+  // toObject: { getters: true, setters: true },
 });
 
 // challengeSchema.virtual('submissions').get(function submissions() {
 //   return Submission.find({_challenge: this._id}).count();
 // });
 
-challengeSchema.virtual('userNamer').set(function() {
-  User.findById(this._owner, function(err, found) {
-    return found.givenName + ' ' + found.surname;
-  });
-});
+// challengeSchema.virtual('userNamer').set(function() {
+//   User.findById(this._owner, function(err, found) {
+//     return found.givenName + ' ' + found.surname;
+//   });
+// });
 
 const Challenge = mongoose.model('Challenge', challengeSchema);
 
