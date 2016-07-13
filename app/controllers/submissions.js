@@ -30,6 +30,7 @@ const create = (req, res, next) => {
       _challenge: req.body.upload.challenge_id,
       location: response.Location,
       challengeName: req.body.upload.challengeName,
+      _owner: req.currentUser._id,
     };
   })
   .then((upload) => {
