@@ -38,7 +38,7 @@ const create = (req, res, next) => {
 };
 
 const update = (req, res, next) => {
-  let search = { _id: req.params.id, _owner: req.currentUser._id };
+  let search = { _id: req.params.id };
   Challenge.findOne(search)
     .then(challenge => {
       if (!challenge) {
@@ -87,5 +87,5 @@ module.exports = controller({
   getUserChallenges,
   getChallengeSubmissions,
 }, { before: [
-  { method: authenticate, except: ['index', 'show'] },
+  { method: authenticate, except: ['index','update', 'show'] },
 ], });
