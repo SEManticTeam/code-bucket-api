@@ -64,8 +64,9 @@ const destroy = (req, res, next) => {
         return next();
       }
 
+      let responseSubmission = submission;
       return submission.remove()
-        .then(() => res.sendStatus(200));
+        .then(() => res.json({ responseSubmission }));
     })
     .catch(err => next(err));
 };
