@@ -55,7 +55,7 @@ const create = (req, res, next) => {
     .then((upload) => {
       return Submission.create(upload);
     })
-    .then(upload => res.json({ upload }))
+    .then(submission => res.json({ submission }))
     .catch(err => next(err));
   });
 };
