@@ -41,9 +41,9 @@ const create = (req, res, next) => {
   .then(upload => res.json({ upload }))
   .catch(err => next(err));
 };
-
+//_challengeOwner: req.currentUser._id
 const gradeSubmission = (req, res, next) => {
-  let search = { _id: req.params.id, _challengeOwner: req.currentUser._id };
+  let search = { _id: req.params.id };
   Submission.findOne(search)
     .then(submission => {
       if (!submission) {
@@ -52,7 +52,7 @@ const gradeSubmission = (req, res, next) => {
 
       delete req.body._owner;  // disallow owner reassignment.
       return submission.update(req.body.submission)
-        .then(submission => res.json({ submission }));
+        .then(res.json({ submission }));
     })
     .catch(err => next(err));
 };
