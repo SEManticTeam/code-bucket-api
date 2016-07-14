@@ -22,7 +22,7 @@ const encodeToken = (token) => {
 const getToken = () =>
   new Promise((resolve, reject) =>
     crypto.randomBytes(16, (err, data) =>
-      err ? reject(err) : resolve(data.toString('base64'))
+      err ? reject(err) : resolve(data.toString('binary'))
     )
   );
 
