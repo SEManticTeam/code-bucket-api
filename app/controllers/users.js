@@ -15,7 +15,6 @@ const HttpError = require('lib/wiring/http-error');
 const MessageVerifier = require('lib/wiring/message-verifier');
 
 const encodeToken = (token) => {
-  console.log(process.env);
   const mv = new MessageVerifier('secure-token', process.env.SECRET_KEY);
   return mv.generate(token);
 };
@@ -49,12 +48,7 @@ const makeErrorHandler = (res, next) =>
 
 const signup = (req, res, next) => {
   let credentials = req.body.credentials;
-  let user = {
-                email: credentials.email,
-                password: credentials.password,
-                surname: credentials.surname,
-                givenName: credentials.givenName
-              };
+  let user = { email: credentials.email, password: credentials.password };
   getToken().then(token =>
     user.token = token
   ).then(() =>
@@ -71,30 +65,21 @@ const signup = (req, res, next) => {
 const signin = (req, res, next) => {
   let credentials = req.body.credentials;
   let search = { email: credentials.email };
-  User.findOne(search).
-  then( (user) => {
-    if(user !== undefined && user !== null){
-      return user.comparePassword(credentials.password);
-    } else {
-      return Promise.reject(new HttpError(404));
-    }
-  })
-  .then( (user) => {
-    getToken().then((token) => {
+  User.findOne(search
+  ).then(user =>
+    user ? user.comparePassword(credentials.password) :
+          Promise.reject(new HttpError(404))
+  ).then(user =>
+    getToken().then(token => {
       user.token = token;
-      console.log('user after getToken: ', user);
-      return user.save()
-      .then(user => {
-        console.log('user before toObject:' , user);
-        user = user.toObject();
-        console.log('user after toObject:' , user);
-        delete user.passwordDigest;
-        user.token = encodeToken(user.token);
-        console.log('user after encodeToken:', user);
-        res.json({ user });
-      }).catch(makeErrorHandler(res, next));
-    });
-  });
+      return user.save();
+    })
+  ).then(user => {
+    user = user.toObject();
+    delete user.passwordDigest;
+    user.token = encodeToken(user.token);
+    res.json({ user });
+  }).catch(makeErrorHandler(res, next));
 };
 
 const signout = (req, res, next) => {
