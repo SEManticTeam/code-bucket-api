@@ -15,7 +15,7 @@ const HttpError = require('lib/wiring/http-error');
 const MessageVerifier = require('lib/wiring/message-verifier');
 
 const encodeToken = (token) => {
-  console.log(process.env.SECRET_KEY);
+  console.log(process.env);
   const mv = new MessageVerifier('secure-token', process.env.SECRET_KEY);
   return mv.generate(token);
 };
@@ -75,12 +75,16 @@ const signin = (req, res, next) => {
   ).then(user =>
     user ? user.comparePassword(credentials.password) :
           Promise.reject(new HttpError(404))
-  ).then(user =>
-    getToken().then(token => {
+  ).then( (user) => {
+    console.log('user: ', user);
+    getToken().then((token) => {
+      console.log('token: ', token);
       user.token = token;
+      console.log('user: ', user);
       return user.save();
-    })
-  ).then(user => {
+    });
+  })
+  .then(user => {
     user = user.toObject();
     delete user.passwordDigest;
     user.token = encodeToken(user.token);
