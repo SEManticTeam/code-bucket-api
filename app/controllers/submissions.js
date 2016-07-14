@@ -32,6 +32,7 @@ const create = (req, res, next) => {
       challengeName: req.body.upload.challengeName,
       _owner: req.currentUser._id,
       ownerName: req.currentUser.givenName + ' ' + req.currentUser.surname,
+      _challengeOwner: req.body.challengeOwner,
     };
   })
   .then((upload) => {
@@ -39,6 +40,21 @@ const create = (req, res, next) => {
   })
   .then(upload => res.json({ upload }))
   .catch(err => next(err));
+};
+
+const gradeSubmission = (req, res, next) => {
+  let search = { _id: req.params.id, _challengeOwner: req.currentUser._id };
+  Submission.findOne(search)
+    .then(submission => {
+      if (!submission) {
+        return next();
+      }
+
+      delete req.body._owner;  // disallow owner reassignment.
+      return submission.update(req.body.submission)
+        .then(submission => res.json({ submission }));
+    })
+    .catch(err => next(err));
 };
 
 const update = (req, res, next) => {
@@ -98,6 +114,7 @@ module.exports = controller({
   update,
   destroy,
   getUserSubmissions,
+  gradeSubmission,
 }, { before: [
   { method: authenticate, except: ['index', 'show'] },
   { method: multer.single('upload[file]'), only: ['create', 'update'] },

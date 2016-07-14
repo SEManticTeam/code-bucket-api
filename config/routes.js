@@ -20,6 +20,8 @@ module.exports = require('lib/wiring/routes')
 // all routes created
 .resources('submissions')
 .get('/user-submissions', 'submissions#getUserSubmissions')
+.patch('/grade-submission/:id', 'submissions#gradeSubmission')
+
 
 .resources('challenges')
 .get('/user-challenges', 'challenges#getUserChallenges')

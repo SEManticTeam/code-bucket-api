@@ -44,6 +44,11 @@ const submissionSchema = new mongoose.Schema({
     ref: 'Challenge',
     required: false,
   },
+  _challengeOwner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Challenge',
+    required: false,
+  }
 }, {
   timestamps: true,
   // toJSON: { virtuals: true },
