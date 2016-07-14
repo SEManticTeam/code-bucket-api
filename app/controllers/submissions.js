@@ -93,13 +93,30 @@ const update = (req, res, next) => {
           location: response.Location,
         };
       })
+
+      // this is re-auto-grading
       .then((updateObject) => {
-        return submission.update(updateObject);
-      })
-      .then((updateObject) => {
-        res.json({ updateObject });
-      })
-      .catch(err => next(err));
+        let submissionString = req.file.buffer.toString('utf8');
+        updateObject.evalAnswer = eval(submissionString).toString();
+        let challengeSearch = { _id: submission._challenge };
+        Challenge.find(challengeSearch)
+        .then((challenge)  => {
+          if(updateObject.evalAnswer === challenge[0].answer){
+            updateObject.autoPass = true;
+          } else {
+            updateObject.autoPass = false;
+          }
+          updateObject.autoGraded = true;
+          return updateObject;
+        })
+        .then((updateObject) => {
+          return submission.update(updateObject);
+        })
+        .then((submission) => {
+          res.json({ submission });
+        })
+        .catch(err => next(err));
+      });
     });
   };
 
