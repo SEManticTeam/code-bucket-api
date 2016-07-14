@@ -151,6 +151,6 @@ module.exports = controller({
   getUserSubmissions,
   gradeSubmission,
 }, { before: [
-  { method: authenticate, except: ['index', 'show'] },
+  { method: authenticate },
   { method: multer.single('upload[file]'), only: ['create', 'update'] },
 ], });
