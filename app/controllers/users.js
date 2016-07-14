@@ -76,25 +76,21 @@ const signin = (req, res, next) => {
     user ? user.comparePassword(credentials.password) :
           Promise.reject(new HttpError(404))
   ).then( (user) => {
-    console.log('user before getToken: ', user);
     getToken().then((token) => {
-      console.log('token: ', token);
       user.token = token;
       console.log('user after getToken: ', user);
-      return user.save();
+      return user.save()
+      .then(user => {
+        console.log('user before toObject:' , user);
+        user = user.toObject();
+        console.log('user after toObject:' , user);
+        delete user.passwordDigest;
+        user.token = encodeToken(user.token);
+        console.log('user after encodeToken:', user);
+        res.json({ user });
+      }).catch(makeErrorHandler(res, next));
     });
-    console.log('before final return user');
-    return user;
-  })
-  .then(user => {
-    console.log('user before toObject:' , user);
-    user = user.toObject();
-    console.log('user after toObject:' , user);
-    delete user.passwordDigest;
-    user.token = encodeToken(user.token);
-    console.log('user after encodeToken:', user);
-    res.json({ user });
-  }).catch(makeErrorHandler(res, next));
+  });
 };
 
 const signout = (req, res, next) => {
