@@ -71,11 +71,15 @@ const signup = (req, res, next) => {
 const signin = (req, res, next) => {
   let credentials = req.body.credentials;
   let search = { email: credentials.email };
-  User.findOne(search
-  ).then(user =>
-    user ? user.comparePassword(credentials.password) :
-          Promise.reject(new HttpError(404))
-  ).then( (user) => {
+  User.findOne(search).
+  then( (user) => {
+    if(user !== undefined && user !== null){
+      return user.comparePassword(credentials.password);
+    } else {
+      return Promise.reject(new HttpError(404));
+    }
+  })
+  .then( (user) => {
     getToken().then((token) => {
       user.token = token;
       console.log('user after getToken: ', user);
