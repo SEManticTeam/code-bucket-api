@@ -60,7 +60,7 @@ const create = (req, res, next) => {
 };
 
 const gradeSubmission = (req, res, next) => {
-  let search = { _id: req.params.id };
+  let search = { _id: req.params.id, _challengeOwner: req.currentUser._id };
   Submission.findOne(search)
     .then(submission => {
       if (!submission) {
@@ -91,6 +91,8 @@ const update = (req, res, next) => {
       .then((response) => {
         return {
           location: response.Location,
+          graded: false,
+          pass: null,
         };
       })
 
