@@ -24,7 +24,7 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  uploader.awsUpload(req.file.buffer)
+  uploader.awsUpload(req.file.buffer, req.body.upload.challengeName)
   .then((response) => {
     return {
       location: response.Location,
@@ -52,6 +52,7 @@ const create = (req, res, next) => {
       return upload;
     })
     .then((upload) => {
+      console.log(upload);
       return Submission.create(upload);
     })
     .then(submission => res.json({ submission }))
