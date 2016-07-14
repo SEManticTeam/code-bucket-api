@@ -15,6 +15,7 @@ const HttpError = require('lib/wiring/http-error');
 const MessageVerifier = require('lib/wiring/message-verifier');
 
 const encodeToken = (token) => {
+  console.log(process.env.SECRET_KEY);
   const mv = new MessageVerifier('secure-token', process.env.SECRET_KEY);
   return mv.generate(token);
 };
@@ -22,7 +23,7 @@ const encodeToken = (token) => {
 const getToken = () =>
   new Promise((resolve, reject) =>
     crypto.randomBytes(16, (err, data) =>
-      err ? reject(err) : resolve(data.toString('binary'))
+      err ? reject(err) : resolve(data.toString('base64'))
     )
   );
 
