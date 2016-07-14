@@ -83,6 +83,7 @@ const signin = (req, res, next) => {
       console.log('user after getToken: ', user);
       return user.save();
     });
+    console.log('before final return user');
     return user;
   })
   .then(user => {
