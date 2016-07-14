@@ -83,11 +83,14 @@ const signin = (req, res, next) => {
       console.log('user: ', user);
       return user.save();
     });
+    return user;
   })
   .then(user => {
     user = user.toObject();
+    console.log('user after toObject:' , user);
     delete user.passwordDigest;
     user.token = encodeToken(user.token);
+    console.log('user after encodeToken:', user);
     res.json({ user });
   }).catch(makeErrorHandler(res, next));
 };
