@@ -5,6 +5,7 @@ const multer = require('app/middleware').multer;
 
 const models = require('app/models');
 const Submission = models.submission;
+const Challenge = models.challenge;
 
 const uploader = require('lib/aws-s3-upload');
 
@@ -25,21 +26,38 @@ const show = (req, res, next) => {
 const create = (req, res, next) => {
   uploader.awsUpload(req.file.buffer)
   .then((response) => {
-    //return Object.assign({ // probably necessary for auth attaching user id
+    console.log(req.body.upload);
     return {
-      _challenge: req.body.upload.challenge_id,
       location: response.Location,
+      _challenge: req.body.upload.challenge_id,
       challengeName: req.body.upload.challengeName,
+      _challengeOwner: req.body.upload.challengeOwner,
       _owner: req.currentUser._id,
       ownerName: req.currentUser.givenName + ' ' + req.currentUser.surname,
-      _challengeOwner: req.body.challengeOwner,
     };
   })
+
+  // this is the auto-grading
   .then((upload) => {
-    return Submission.create(upload);
-  })
-  .then(upload => res.json({ upload }))
-  .catch(err => next(err));
+    let submissionString = req.file.buffer.toString('utf8');
+    upload.evalAnswer = eval(submissionString).toString();
+    let challengeSearch = { _id: req.body.upload.challenge_id };
+    Challenge.find(challengeSearch)
+    .then((challenge)  => {
+      if(upload.evalAnswer === challenge[0].answer){
+        upload.autoPass = true;
+      } else {
+        upload.autoPass = false;
+      }
+      upload.autoGraded = true;
+      return upload;
+    })
+    .then((upload) => {
+      return Submission.create(upload);
+    })
+    .then(upload => res.json({ upload }))
+    .catch(err => next(err));
+  });
 };
 
 const gradeSubmission = (req, res, next) => {
