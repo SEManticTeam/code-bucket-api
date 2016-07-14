@@ -30,7 +30,7 @@ const create = (req, res, next) => {
       location: response.Location,
       _challenge: req.body.upload.challenge_id,
       challengeName: req.body.upload.challengeName,
-      _challengeOwner: req.body.upload.challengeOwner,
+      _challengeOwner: req.body.upload._challengeOwner,
       _owner: req.currentUser._id,
       ownerName: req.currentUser.givenName + ' ' + req.currentUser.surname,
     };
@@ -112,9 +112,8 @@ const update = (req, res, next) => {
         .then((updateObject) => {
           return submission.update(updateObject);
         })
-        .then((submission) => {
-          res.json({ submission });
-        })
+        .then(res.json({ submission })
+        )
         .catch(err => next(err));
       });
     });
