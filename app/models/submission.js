@@ -27,12 +27,21 @@ const submissionSchema = new mongoose.Schema({
     type: String,
     required: false
   }],
-  pass: {
-    type: Boolean
-  },
   graded: {
     type: Boolean,
     default: false,
+  },
+  pass: {
+    type: Boolean
+  },
+  evalAnswer: {
+    type: String
+  },
+  autoGraded: {
+    type: Boolean,
+  },
+  autoPass: {
+    type: Boolean
   },
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -44,6 +53,11 @@ const submissionSchema = new mongoose.Schema({
     ref: 'Challenge',
     required: false,
   },
+  _challengeOwner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Challenge',
+    required: false,
+  }
 }, {
   timestamps: true,
   // toJSON: { virtuals: true },

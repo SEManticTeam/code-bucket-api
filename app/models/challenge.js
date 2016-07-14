@@ -22,6 +22,10 @@ const challengeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  answer: {
+    type: String,
+    required: true
+  },
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
