@@ -40,7 +40,7 @@ const create = (req, res, next) => {
 };
 
 const update = (req, res, next) => {
-  let search = { _id: req.params.id };
+  let search = { _id: req.params.id, _owner: req.currentUser._id };
   Challenge.findOne(search)
     .then(challenge => {
       if (!challenge) {
