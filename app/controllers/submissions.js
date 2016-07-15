@@ -87,7 +87,7 @@ const update = (req, res, next) => {
       delete req.body._owner;
 
       // upload file to S3
-      uploader.awsUpload(req.file.buffer)
+      uploader.awsUpload(req.file.buffer, submission.challengeName)
 
       .then((response) => {
         return {
@@ -99,15 +99,11 @@ const update = (req, res, next) => {
 
       // this is re-auto-grading
       .then((updateObject) => {
-        console.log('hi');
-        console.log(req.body.upload);
         let submissionString = req.file.buffer.toString('utf8');
         let challengeSearch = { _id: submission._challenge };
         Challenge.find(challengeSearch)
         .then((challenge)  => {
           let invocation = challenge[0].invocation;
-          console.log(invocation);
-          console.log(submissionString);
           updateObject.evalAnswer = eval(`'use strict'; \n\n ${submissionString} \n\n ${invocation}`).toString();
           if(updateObject.evalAnswer === challenge[0].answer){
             updateObject.autoPass = true;
