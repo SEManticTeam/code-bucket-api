@@ -43,13 +43,20 @@ const create = (req, res, next) => {
     Challenge.find(challengeSearch)
     .then((challenge)  => {
       let invocation = challenge[0].invocation;
-      upload.evalAnswer = eval(`'use strict'; \n\n ${submissionString} \n\n ${invocation}`).toString();
+
+      try {
+        upload.evalAnswer = eval(`'use strict'; \n\n ${submissionString} \n\n ${invocation}`).toString();
+      } catch(err) {
+        upload.evalAnswer = null;
+      }
+
       if(upload.evalAnswer === challenge[0].answer){
         upload.autoPass = true;
       } else {
         upload.autoPass = false;
       }
       upload.autoGraded = true;
+
       return upload;
     })
     .then((upload) => {
@@ -104,13 +111,20 @@ const update = (req, res, next) => {
         Challenge.find(challengeSearch)
         .then((challenge)  => {
           let invocation = challenge[0].invocation;
-          updateObject.evalAnswer = eval(`'use strict'; \n\n ${submissionString} \n\n ${invocation}`).toString();
+
+          try {
+            updateObject.evalAnswer = eval(`'use strict'; \n\n ${submissionString} \n\n ${invocation}`).toString();
+          } catch(err) {
+            updateObject.evalAnswer = null;
+          }
+
           if(updateObject.evalAnswer === challenge[0].answer){
             updateObject.autoPass = true;
           } else {
             updateObject.autoPass = false;
           }
           updateObject.autoGraded = true;
+
           return updateObject;
         })
         .then((updateObject) => {
