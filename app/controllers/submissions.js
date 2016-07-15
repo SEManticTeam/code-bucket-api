@@ -38,11 +38,12 @@ const create = (req, res, next) => {
 
   // this is the auto-grading
   .then((upload) => {
-    let submissionString = req.file.buffer.toString('utf8');
-    upload.evalAnswer = eval(submissionString).toString();
     let challengeSearch = { _id: req.body.upload.challenge_id };
     Challenge.find(challengeSearch)
     .then((challenge)  => {
+      let submissionString = req.file.buffer.toString('utf8');
+      let invocation = challenge[0].invocation;
+      upload.evalAnswer = eval(`'use strict'; \n\n ${submissionString} \n\n ${invocation}`).toString();
       if(upload.evalAnswer === challenge[0].answer){
         upload.autoPass = true;
       } else {
