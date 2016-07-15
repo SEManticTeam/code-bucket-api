@@ -100,11 +100,12 @@ const update = (req, res, next) => {
 
       // this is re-auto-grading
       .then((updateObject) => {
-        let submissionString = req.file.buffer.toString('utf8');
-        updateObject.evalAnswer = eval(submissionString).toString();
         let challengeSearch = { _id: submission._challenge };
         Challenge.find(challengeSearch)
         .then((challenge)  => {
+          let submissionString = req.file.buffer.toString('utf8');
+          let invocation = challenge[0].invocation;
+          updateObject.evalAnswer = eval(`'use strict'; \n\n ${submissionString} \n\n ${invocation}`).toString();
           if(updateObject.evalAnswer === challenge[0].answer){
             updateObject.autoPass = true;
           } else {
