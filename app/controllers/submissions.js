@@ -60,9 +60,21 @@ const create = (req, res, next) => {
       return upload;
     })
     .then((upload) => {
+      Challenge.findById(upload._challenge)
+      .then((challenge) => {
+        return challenge.update({
+          submissionCount: challenge.submissionCount += 1
+        });
+      })
+      .then();
+      return upload;
+    })
+    .then((upload) => {
       return Submission.create(upload);
     })
-    .then(submission => res.json({ submission }))
+    .then((submission) => {
+      res.json({ submission });
+    })
     .catch(err => next(err));
   });
 };
@@ -147,7 +159,16 @@ const destroy = (req, res, next) => {
 
       let responseSubmission = submission;
       return submission.remove()
-        .then(() => res.json({ responseSubmission }));
+      .then(() => {
+        return Challenge.findById(responseSubmission._challenge)
+        .then((challenge) => {
+          return challenge.update({
+            submissionCount: challenge.submissionCount -= 1
+          });
+        })
+        .then();
+      })
+      .then(() => res.json({ responseSubmission }));
     })
     .catch(err => next(err));
 };
